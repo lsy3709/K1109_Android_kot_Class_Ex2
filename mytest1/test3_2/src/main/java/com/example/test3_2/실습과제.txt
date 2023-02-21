@@ -18,6 +18,6 @@
 더미 객체 임시 객체 ( 등록된 사용자 예시 ex) admin / 1234
 일치하면 로그인 되었다고 콘솔에 해당 유저 출력.
 참고 파일. 자바 깃허브 파일에 IO 패키지 .
-참고하기. .
+참고하기.
 java_sample_test/src/ch15_stream/others_1025/ScannerTest.java
 !
