@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ch9_Resource</string>
+    <string name="txt_data1">안녕하세요</string>
+<!--    <string name="text1_message">사과, 바나나, 집, 안드로이드</string>-->
+
+</resources>

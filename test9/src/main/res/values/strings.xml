@@ -2,6 +2,7 @@
     <string name="app_name">Test9</string>
     <string name="txt_data1">Hello</string>
     <string name="txt_data2">World</string>
+<!--    <string name="text1_message">apple, house, java, android</string>-->
     <string name="title_activity_main242">MainActivity242</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
