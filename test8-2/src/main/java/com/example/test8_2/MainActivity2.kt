@@ -18,8 +18,9 @@ class MainActivity2 : AppCompatActivity(), CompoundButton.OnCheckedChangeListene
 
     }
 
+    // 2번째 방법의 인터페이스 구현시 재정의해야하는 함수.
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        Log.d("lsy", "체크박스 클릭")
+        Log.d("lsy", "체크박스 클릭222")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,26 +31,26 @@ class MainActivity2 : AppCompatActivity(), CompoundButton.OnCheckedChangeListene
         val binding = ActivityMain2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.img1.setOnClickListener {
-            if(state == 0){
-                binding.img1.visibility = View.INVISIBLE
-                state = 1
-            } else {
-                binding.img1.visibility = View.VISIBLE
-                state = 0
-            }
-        }
-
-        binding.button.setOnLongClickListener {
-            if(state == 0){
-                binding.img1.visibility = View.INVISIBLE
-                state = 1
-            } else {
-                binding.img1.visibility = View.VISIBLE
-                state = 0
-            }
-            true
-        }
+//        binding.img1.setOnClickListener {
+//            if(state == 0){
+//                binding.img1.visibility = View.INVISIBLE
+//                state = 1
+//            } else {
+//                binding.img1.visibility = View.VISIBLE
+//                state = 0
+//            }
+//        }
+//
+//        binding.button.setOnLongClickListener {
+//            if(state == 0){
+//                binding.img1.visibility = View.INVISIBLE
+//                state = 1
+//            } else {
+//                binding.img1.visibility = View.VISIBLE
+//                state = 0
+//            }
+//            true
+//        }
 
 
       //3번째 sam 기법 (single abstract method)

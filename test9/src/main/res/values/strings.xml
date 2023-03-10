@@ -8,6 +8,8 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="hello">안녕하세요. 저희 사이트에 방문해 주셔서 감사합니다. </string>
+    <string name="footer_1_company_address">회사 주소 : 부산광역시 부산진구 부전동 파이낸스 건물 </string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
