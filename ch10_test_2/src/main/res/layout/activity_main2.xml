@@ -8,6 +8,10 @@
     android:orientation="vertical"
     tools:context=".MainActivity2">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bread2_200_300"/>
     <EditText
         android:id="@+id/edit1"
         android:layout_width="match_parent"
