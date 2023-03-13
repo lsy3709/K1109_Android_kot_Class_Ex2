@@ -15,7 +15,11 @@ class ReplyReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val replyTxt = RemoteInput.getResultsFromIntent(intent)?.getCharSequence("key_text_reply")
-        Log.d("kkang", "replyTxt : $replyTxt")
+        /*val title = RemoteInput.getResultsFromIntent(intent)?.getCharSequence("KEY_TEXT_REPLY_TITLE")
+        val message = RemoteInput.getResultsFromIntent(intent)?.getCharSequence("KEY_TEXT_REPLY_MESSAGE")*/
+        Log.d("lsy", "replyTxt : $replyTxt")
+  /*      Log.d("lsy", "KEY_TEXT_REPLY_TITLE : $title")
+        Log.d("lsy", "KEY_TEXT_REPLY_MESSAGE : $message")*/
 
         val manager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         val builder: NotificationCompat.Builder
@@ -38,8 +42,8 @@ class ReplyReceiver : BroadcastReceiver() {
 
         builder.setSmallIcon(android.R.drawable.ic_notification_overlay)
         builder.setWhen(System.currentTimeMillis())
-        builder.setContentTitle("Content Title")
-        builder.setContentText("Content Massage")
+        builder.setContentTitle("제목")
+        builder.setContentText("$replyTxt")
 
         manager.notify(11, builder.build())
     }
