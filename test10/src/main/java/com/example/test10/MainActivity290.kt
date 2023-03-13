@@ -10,6 +10,7 @@ import com.example.test10.databinding.ActivityMain290Binding
 class MainActivity290 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val binding = ActivityMain290Binding.inflate(layoutInflater)
         setContentView(binding.root)
 

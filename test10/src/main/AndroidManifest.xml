@@ -10,6 +10,7 @@
         android:protectionLevel="dangerous"/>
 
     <!--허가에 대한 이용-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="com.example.test10.Test_Permission"/>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -26,7 +27,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TestLab">
-      <!--  <activity
+        <activity
             android:name=".MainActivity306"
             android:exported="true">
             <intent-filter>
@@ -35,7 +36,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
+
+ <!--       <activity
             android:name=".MainActivity305"
             android:exported="true">
             <intent-filter>
@@ -44,8 +46,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+-->
 
-        <receiver
+       <!-- <receiver
             android:name=".ReplyReceiver"
             android:enabled="true"
             android:exported="true" />
@@ -58,9 +61,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>-->
 
-        <receiver
+     <!--   <receiver
             android:name=".OneReceiver"
             android:enabled="true"
             android:exported="true" />
@@ -74,6 +77,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".DetailActivity"
             android:exported="false" />
@@ -85,8 +89,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
+        </activity>-->
+
+<!--        <activity
             android:name=".MainActivity290"
             android:exported="true">
             <intent-filter>
@@ -95,9 +100,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-        </activity>
-        -->
-        <activity
+        </activity>-->
+
+<!--        <activity
             android:name=".MainActivity288"
             android:exported="true">
             <intent-filter>
@@ -105,7 +110,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>-->
 
 <!--        <activity
             android:name=".MainActivity282"

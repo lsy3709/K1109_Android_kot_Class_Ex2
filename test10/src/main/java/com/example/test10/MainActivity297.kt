@@ -30,7 +30,7 @@ class MainActivity297 : AppCompatActivity() {
                 val channel = NotificationChannel(
                     channelId,
                     channelName,
-                    NotificationManager.IMPORTANCE_LOW
+                    NotificationManager.IMPORTANCE_DEFAULT
                 )
                 //채널에 다양한 정보 설정
                 channel.description = "My Channel One Description"
