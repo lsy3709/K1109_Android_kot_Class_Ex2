@@ -15,48 +15,72 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test11.databinding.ActivityMain342Binding
-import com.example.test11.databinding.ActivityMain350Binding
+import com.example.test11.databinding.ActivityTestBinding
 import com.example.test11.databinding.Item342Binding
+import com.example.test11.databinding.TestitemBinding
 
-class MainActivity350 : AppCompatActivity() {
+class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMain350Binding.inflate(layoutInflater)
+
+        // 리사이클러뷰가 보여주게 될 레이아웃.
+        val binding = ActivityTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 임의로 보여줄 문자열 배열.
         val datas = mutableListOf<String>()
-        for(i in 1..9){
-            datas.add("Item $i")
-        }
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = MyAdapter(datas)
-        binding.recyclerView.addItemDecoration(MyDecoration(this))
-    }
+        datas.add("메뉴1 : 햄버거")
+        datas.add("메뉴2 : 국밥")
+        datas.add("메뉴3 : 중국집")
+        datas.add("메뉴4 : 대독장")
+        datas.add("추가 메뉴5 : 우정.")
 
-    class MyViewHolder(val binding: Item342Binding): RecyclerView.ViewHolder(binding.root)
+        // 추가로 레이아웃을 변경 하고 싶다면, 이 부분 수정 하기.
+//        val layoutManager2 = GridLayoutManager(this,2,
+//        GridLayoutManager.VERTICAL, false)
+
+
+        // 만들었던 뷰홀더, 어댑터를 연결 시켜주는 부분.
+        // 리사이클러뷰 출력 하는 부분
+        binding.recyclerView2.layoutManager = LinearLayoutManager(this)
+//        binding.recyclerView2.layoutManager = layoutManager2
+        binding.recyclerView2.adapter = MyAdapter(datas)
+        /*(binding.recyclerView2.adapter as MyAdapter).notifyDataSetChanged()*/
+        // 부가적인 옵션, 뒤에서 이미지 넣는 예제 확인 해 볼 예정.
+       /* binding.recyclerView2.addItemDecoration(
+            DividerItemDecoration(this,
+                LinearLayoutManager.VERTICAL)
+        )*/
+    // 배경 이미지 추가 및 , 로고 추가 , 각 항목 디자인 변경.
+        binding.recyclerView2.addItemDecoration(
+            MyDecoration(this))
+
+    }
+    class MyViewHolder(val binding: TestitemBinding): RecyclerView.ViewHolder(binding.root)
 
     class MyAdapter(val datas: MutableList<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
         override fun getItemCount(): Int{
-            Log.d("kkang", "init datas size: ${datas.size}")
+            Log.d("lsy", "init datas size: ${datas.size}")
             return datas.size
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
-                = MyViewHolder(Item342Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+                = MyViewHolder(TestitemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            Log.d("kkang","onBindViewHolder : $position")
+            Log.d("lsy","onBindViewHolder : $position")
             val binding=(holder as MyViewHolder).binding
             //뷰에 데이터 출력
-            binding.itemData.text= datas[position]
+            binding.itemData2.text= datas[position]
 
             //뷰에 이벤트 추가
-            binding.itemRoot.setOnClickListener{
-                Log.d("kkang", "item root click : $position")
+            binding.itemRoot2.setOnClickListener{
+                Log.d("lsy", "item root click : $position")
             }
         }
     }
@@ -64,7 +88,7 @@ class MainActivity350 : AppCompatActivity() {
     class MyDecoration(val context: Context): RecyclerView.ItemDecoration() {
         override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
             super.onDraw(c, parent, state)
-            c.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.stadium), 0f,0f,null);
+            c.drawBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.bread2), 0f,0f,null);
         }
 
         override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -108,5 +132,8 @@ class MainActivity350 : AppCompatActivity() {
 
         }
     }
+
+
 }
+
 
