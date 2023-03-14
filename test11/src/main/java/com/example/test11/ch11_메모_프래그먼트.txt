@@ -1,0 +1,136 @@
+프래그먼트 소개.
+1.텍스트 뷰나, 버튼 액티비티 화면을 구성하는 뷰.
+2.자체만으로는 화면에 출력이 되는게 없다.
+3.다른 뷰와 차이점 동작이 액티비티 처럼 동작.
+4. 액티비티에서 작성할수 있는 모든 코드는, 여기 프래그먼트에서도 작성이 가능.
+
+배경.
+태블릿, 기존의 폰보다 화면 해상도, 크기가 큽니다.
+하나의 액티비에서 화면을 전부다 구성하기가 매우 힘듭니다.
+한 화면에 뷰 클래스를 2개를 출력해야하는데,
+프래그먼트 개념을 통해서, 한 화면에 2개의 프래그먼트로 화면 구성.
+왼쪽 사이드 화면, 오른쪽에 사이드 메뉴에서 선택된 메뉴가 출력이 되는 화면.
+!
+모바일에서 , 프래그먼트를 이용해서, 리사클러뷰, 뷰페이저 의 구성품으로 사용할 예정.
+
+결론,
+하나의 액티비티에서, 여러개의 프래그먼트를 사용해서, 부품을 교체 하듯이 사용함.
+
+프래그먼트 사용하기 위해서
+build.gradle  파일에서 구현
+implementation 'androidx.fragment:fragment-ktx:1.5.5'
+
+ktx 파일이 붙으면 코틀린 파일을 의미함.
+없으면 자바 파일 버전이라고 보시면 됩니다.
+
+프래그먼트 출력하기 위한 메모.
+
+1. 뷰이지만 이 자체로는 화면에 출력이 되는것이 없다.
+2. 먼저, 화면을 구성하는 xml를 먼저 작성.
+3. 액티비티 만드면, 자동으로 xml 화면이 만들어진다.
+(액티비티 파일만 복사를 하면 , 주의 , 안드로이드 매니페스트 파일에 자동 등록부분.)
+4. Fragment 클래스 상속.
+5. 최소한으로 onCreateView() 함수는 재정의해서 작성해야한다.
+
+------------------------------------------------
+동적으로 프래그먼트 동작.
+액티비티 코드에서 프래그먼트 출력.
+1. 액티비티의 레이아웃이 필요.
+xml 파일에 프래그먼트가 출력될 뷰를 하나 준비.
+예) 레이아웃 상관없음.
+<LinearLayout
+	android:id="@+id/fragment_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:orientation="vertical"
+</LinearLayout>
+
+2. FragmentManager로 만든 FragmentTransaction클래스 의 함수 이용.
+예)
+val fragmentManager: FragmentManager = supportFragmentManager
+val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+val fragment = TwoFragment() // 교체될 프래그먼트 들이 온다.
+//추가.
+// 첫번째 매개변수는 프래그먼트가 출력될 뷰의 id 값.
+transaction.add(R.id.fragment_content, fragment)
+// 커밋 하게 되면 해당 뷰를 그려주기.
+transaction.commit()
+
+코드에서 프래그먼트를 동적으로 제어(추가, 제거 등)하려면 FragmentManager로 만든 FragmentTransaction 클래스의 함수를 이
+용
+샘플 함수
+add(int containerViewId, Fragment fragment): 새로운 프래그먼트를 화면에 추가합니다.
+
+replace(int containerViewId, Fragment fragment): 추가된 프래그먼트를 대체합니다. 
+
+remove(Fragment fragment): 추가된 프래그먼트를 제거합니다. 
+
+ commit(): 화면에 적용합니다
+ ------------------------------------------------
+
+프래그먼트 생명주기
+
+1. 액티비티 동작하는 뷰.
+2. 액티비티에서 작성 할수 있는 코드는 모두 다 작성 가능.
+3. 액티비티 생명주기와 같다.
+4.
+1번 :onCreate(),
+2번 :onStart(),
+3번 :onResume(),
+4번 :onPause(),
+5번 :onStop(),
+6번 :onDestory()
+
+5.
+2번에서 함수가 호출되는 순간 해당 액티비티가 출력하는 프래그먼트의 onStart() 함수도 호출.
+6.
+생명주기 5단계
+초기화, 생성, 시작, 재개, 소멸 하는 단계로 구분됨.
+
+7. 각 단계에서 자동으로 호출되는 함수들.
+1) 초기화가 되면서, onAttach와 onCreate 함수가 호출.
+초기화 단계 : 프래그먼트의 화면을 구성할 뷰가 준비가 되지 않은 상태.
+
+2) 생성단계 : 프래그먼트의 화면을 구성할 뷰를 준비.
+onCreateView 함수에서 프래그먼트 화면을 구성할 뷰객체 준비.
+
+3) 시작단계 : 프래그먼트 화면이 사용자에게 보이는 단계
+
+4) 재개단계 : 포커스를 가지고 사용자의 이벤트를 처리 할수 있는 단계.
+데이터를 바인딩 하는 단계,
+예) 문자열을 준비해놓으면 , 해당 문자열을 바인딩,
+
+5) 소멸 단계
+
+예) 프래그먼트가 처음 화면에 나올 때 단계 변화,
+onAttach -> onCreate -> onCreateView
+-> onViewCreated -> onStart -> onResume
+
+8.
+백스택 이란
+프래그먼트가 화면에 보이지 않는 순간 제거하지 않고 저장했다가
+다시 이용할수 있는 기능.
+예)
+사용자가 뒤로가기 버튼을 누를 때 이전 프래그먼트 화면으로 전환.
+
+만약, 백스택 설정을 안하면, 뒤로가기 했을 때,
+해당 프래그먼트 onDestory 까지 호출되고 제거.
+
+백스택을 사용하면, 프래그먼트 동작 방식.
+프래그먼트가 제거되지 않고, onDestoryView 함수까지만 호출.
+onPause -> onStop -> onDestoryView 함수가 자동 호출.
+후에 다시 반복됨.
+onCreateView
+-> onViewCreated -> onStart -> onResume
+
+백스택 설정.
+transaction.addToBackStack(null)
+
+
+
+
+
+
+
+
+

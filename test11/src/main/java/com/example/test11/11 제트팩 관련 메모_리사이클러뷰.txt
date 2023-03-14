@@ -1,0 +1,124 @@
+리사이클러 뷰 메모 . 
+: 목록 화면을 만들 때 사용. 
+
+1. RecyclerView 클래스만으로는 화면에 아무것도 출력이 안됨. 
+2. 구성요소 
+ViewHolder(필수) : 항목에 필요한 뷰 객체 가짐. 
+Adapter(필수): 항목을 구성, -> 데이터 바인딩. 
+LayoutManager(필수): 항목 배치. -> 수직으로 나열 제일 많이 이용. 수평도 이용, 그리드, 
+ItemDecoration(옵션) : 항목 꾸미기,-> 배경화면 넣거나, 이미지 추가. 등. 
+
+3. 간단한 구조 소개 
+1) 뷰 홀더 각 항목을 구성하는 뷰 객체를 가진다. 
+2) 어댑터는 뷰 홀더에 있는 뷰 객체에 적절한 데이터를 대입해 항목 완성. 
+3) 레이아웃 매니저 어댑터가 만든 항목들을 어떻게 배치할지 결정함. 
+4) 리사이클러 뷰를 출력. 
+
+참고)
+안드로이드 버전 1부터 나온, 리스트뷰 출력이 가능하지만, 
+왜 ? 리사이클러 뷰를 사용하느냐? 
+1) 기능 더 많이 추가. 
+2) 개발자가 많이 이용하고, 
+3) 어려운 목록 뷰를 쉽게 만들수 있는 장점. !!!
+
+원래는 build.gradle 파일 구현.
+implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+안드로이드_스튜디오 4.1 버전 이후 부터 머터리얼 라이브러리에 포함되었음. 
+예)
+implementation 'com.google.android.material:material:1.5.0'
+결론, 많이 사용되고 있다. 그래서, 기본으로 탑재 해준다. 
+!
+
+순서)
+1. 리사이클러 뷰 등록. 
+MainActivity342 만드면 -> xml 같이 만들어줌. 
+activity_main342.xml 파일 필요.)
+예)
+<androidx.recyclerview.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+
+2. 목록에 표시할 항목 뷰 만들기. 
+예)item_342.xml 필요. 
+주의)
+텍스트 뷰에 값이 없음. 어댑터 클래스에서 해당 데이터를 주입 할 예정. 
+<LinearLayout
+    android:id="@+id/item_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:layout_margin="8dp">
+
+    <TextView
+        android:id="@+id/item_data"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16dp"/>
+</LinearLayout>
+
+3. 뷰 홀더 준비 
+: 각 항목에 해당하는 뷰 객체를 가지는 뷰 홀더 역할. 
+RecyclerView.ViewHolder 를 상속받아 작성. 
+예) 
+class MyViewHolder(val binding: Item342Binding): 
+RecyclerView.ViewHolder(binding.root)
+주의) 
+원래 뷰 홀더에 항목들의 뷰 객체를 선언하고, findViewById로 가져와야 하지만, 
+뷰 바인딩 기법을 사용해서, 해당 바인딩 객체만 가지고 있으면 됩니다. 
+코드가 짧아지고, 자동으로 구성. 
+
+4. 어댑터 준비. 
+: 뷰 홀더에 뷰에 데이터를 출력해 각 항목 만들어주는 역할. 
+RecyclerView.Adapter 클래스를 상속 받아 작성. 
+예) 매개변수에는 , 목록에 넣을 데이터 배열이 왔음. datas 배열. 
+
+class MyAdapter(val datas: MutableList<String>): 
+RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+// 갯수가 없으면 출력 안됨. 
+override fun getItemCount(): Int{
+	Log.d("kkang", "init datas size: ${datas.size}")
+	return datas.size
+}
+
+//MyViewHolder 위에서 만든 홀더
+// Item342Binding , 목록 요소에 들어가 뷰 
+override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): 
+RecyclerView.ViewHolder
+= MyViewHolder(Item342Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+
+override fun onBindViewHolder(holder: 
+RecyclerView.ViewHolder, position: Int) {
+	Log.d("kkang","onBindViewHolder : $position")
+	val binding=(holder as MyViewHolder).binding
+	//뷰에 데이터 출력
+	// itemData 이 부분 item_main342 부분의 아이디 부분이다. 
+	binding.itemData.text= datas[position]
+
+	//뷰에 이벤트 추가
+	// 해당 항목 하나 클릭시 동작하는 부분. 
+	binding.itemRoot.setOnClickListener{
+		Log.d("kkang", "item root click : $position")
+	}
+}
+}
+
+5. 리사이클러 뷰 출력. 
+
+// 리사이클러뷰 출력 하는 부분
+binding.recyclerView.layoutManager = LinearLayoutManager(this)
+binding.recyclerView.adapter = MyAdapter(datas)
+// 부가적인 옵션, 뒤에서 이미지 넣는 예제 확인 해 볼 예정.
+binding.recyclerView.addItemDecoration(
+	DividerItemDecoration(this,
+	LinearLayoutManager.VERTICAL)
+)
+
