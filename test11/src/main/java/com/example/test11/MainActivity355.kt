@@ -17,6 +17,7 @@ import com.example.test11.databinding.Item354Binding
 class MainActivity355 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main354)
 
         val binding= ActivityMain355Binding.inflate(layoutInflater)
@@ -26,10 +27,12 @@ class MainActivity355 : AppCompatActivity() {
         for(i in 1..3){
             datas.add("Item $i")
         }
+
         val adapter= MyFragmentPagerAdapter(this)
         binding.viewpager.adapter = adapter
     }
 
+    // 어댑터 프래그먼트를 이용한 방식.
     class MyFragmentPagerAdapter(activity: FragmentActivity): FragmentStateAdapter(activity){
         val fragments: List<Fragment>
         init {
