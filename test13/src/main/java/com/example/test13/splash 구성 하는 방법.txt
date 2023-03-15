@@ -1,0 +1,37 @@
+2가지 방법.
+1. 액티비티로 구현하기.
+1) splash 화면 만들기. (액티비티 하나 만들기.)
+splashActivity
+2) 동작 방식
+화면에 보여주고, 핸들러 통해서, 특정 시간 이후에 메인 화면으로 이동하는 구조.
+3)코드 예제
+ Handler().postDelayed({
+            val intent = Intent(this@SplashActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+             },3000)
+
+2. 테마를 이용하는 방법.
+애플리케이션의 기본 테마를 수정해서 구성.
+사용하는 속성  windowBackgroud 사용할 예정.
+
+1) res/values/themes/themes.xml 에서
+ <style>태그 추가하는 작업.
+     <!--splash 효과 스타일 추가하기. -->
+     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+         <item name="android:windowBackground">
+             @drawable/baseball
+         </item>
+     </style>
+
+결론, 액티비티로 구성해서, 코드로 작업 하는 걸로 설정.
+1번 방법으로. 하지만, Handler() 삭제 될 예정이라서,
+다른 라이브러리도 한번 더 추가로 알아보고 필요하면 다시 구성하기.
+
+
+
+
+
+
+
+
