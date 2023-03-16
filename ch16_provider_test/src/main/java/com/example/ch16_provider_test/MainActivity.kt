@@ -11,11 +11,7 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import com.example.ch16_provider_test.databinding.ActivityMainBinding
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,8 +45,14 @@ class MainActivity : AppCompatActivity() {
                 option.inSampleSize = calRatio
 
                 // 넘어온 사진의 바이트로 읽은 객체 존재.
-//                var inputStream = contentResolver.openInputStream(it.data!!.data!!)
+                var inputStream = contentResolver.openInputStream(it.data!!.data!!)
 
+                if (inputStream != null) {
+                    fileUpload(inputStream)
+                }
+                var inputStream2 = contentResolver.openInputStream(it.data!!.data!!)
+                val bitmap = BitmapFactory.decodeStream(inputStream2, null, option)
+                binding.userImageView.setImageBitmap(bitmap)
 
 
                 // 파일에 출력 하기.
@@ -170,4 +172,57 @@ class MainActivity : AppCompatActivity() {
         }
         return inSampleSize
     }
+
+
+    private fun fileUpload(inputStream: InputStream){
+        val timeStamp: String =
+            SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val file = File.createTempFile(
+            "LSYTEST_${timeStamp}_",
+            ".jpg",
+            storageDir
+        )
+        filePath = file.absolutePath
+        val photoURI: Uri = FileProvider.getUriForFile(
+            this,
+            "com.example.ch16_provider_test.fileprovider",
+            file
+        )
+
+        // 갤러리에서 선택 된 사진를 it 으로 받았고,
+        // 위에서 사진의 정보를 바이트로 읽은 inputStream 존재.
+        // 내가 만든 임의의 파일에 쓰기 작업을 하는 코드.
+        try {
+
+            val buff = ByteArray(1024 * 4)
+            val os: OutputStream = FileOutputStream(file)
+            while (true) {
+                val readed: Int
+                readed = inputStream!!.read(buff);
+
+                if (readed == -1) {
+                    break;
+                }
+                os.write(buff, 0, readed);
+
+                //write buff
+//                    downloaded += readed;
+            }
+
+            os.flush();
+
+            os.close();
+
+        } catch (e: IOException) {
+            e.printStackTrace();
+        } finally {
+
+            if (inputStream != null) {
+
+                inputStream.close();
+            }
+        }
+    }
+
 }
