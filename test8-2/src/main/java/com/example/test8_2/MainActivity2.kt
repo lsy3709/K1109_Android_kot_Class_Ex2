@@ -54,7 +54,7 @@ class MainActivity2 : AppCompatActivity(), CompoundButton.OnCheckedChangeListene
 
 
       //3번째 sam 기법 (single abstract method)
-        binding.checkbox.setOnCheckedChangeListener {
+        binding.checkbox?.setOnCheckedChangeListener {
                 a, b ->
             if(state == 0){
                 binding.img1.visibility = View.INVISIBLE
