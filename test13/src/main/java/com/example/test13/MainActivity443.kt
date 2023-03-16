@@ -50,13 +50,16 @@ class MainActivity443 : AppCompatActivity() {
 
 
 
+            // 큐 알고리즘 과 비슷.
             val channel = Channel<Int>()
 
+            // 스코프는 작업 2 방향 나눠서 작업.
+            // 오래 걸리는 작업.
             val backgroundScope = CoroutineScope(Dispatchers.Default + Job())
             backgroundScope.launch {
                 var sum = 0L
                 var time = measureTimeMillis {
-                    for (i in 1..2_000_000_000) {
+                    for (i in 1..2_000_000_000000) {
                         sum += i
                     }
                 }
@@ -64,6 +67,8 @@ class MainActivity443 : AppCompatActivity() {
                 channel.send(sum.toInt())
             }
 
+            // 사용자 이벤트를 처리하는 스코프, 작업의 속도가 빠르게 처리 하는 수행을 시키는게 좋습니다.
+            // 메인 스레드 , UI 스레드, 화면을 구현하는 부분.
             val mainScope= GlobalScope.launch(Dispatchers.Main) {
                 channel.consumeEach {
                     binding.resultView.text = "sum : $it"
