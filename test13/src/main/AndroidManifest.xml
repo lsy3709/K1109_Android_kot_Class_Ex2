@@ -39,7 +39,10 @@
         </activity>
         <activity
             android:name=".MainActivity426"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustUnspecified"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.430">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
