@@ -2,11 +2,14 @@ package com.example.test13
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.Log
 import com.example.test13.databinding.ActivityMain443Binding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
+import kotlin.concurrent.thread
 import kotlin.system.measureTimeMillis
 
 class MainActivity443 : AppCompatActivity() {
@@ -44,6 +47,9 @@ class MainActivity443 : AppCompatActivity() {
 //                }
 //                Log.d("kkang", "time : $time")
 //            }
+
+
+
             val channel = Channel<Int>()
 
             val backgroundScope = CoroutineScope(Dispatchers.Default + Job())
