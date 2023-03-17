@@ -1,6 +1,7 @@
 package com.example.test17
 
 import android.content.ContentUris
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -111,6 +112,17 @@ class MainActivity546 : AppCompatActivity() {
                 //com.example.test17.fileprovider
                 file
             )
+
+            val pref = getSharedPreferences("imgLoadTest", Context.MODE_PRIVATE)
+            pref.edit().run {
+                putString("imgUri", "test 중입니다. ")
+                commit()
+            }
+            val resultStr2 : String? = pref.getString("imgUri","값이 없으면 디폴트값이 옵니다.")
+            val result3 = resultStr2.toString()
+            Log.d("lsy","imgInfo result3 결과 : $resultStr2")
+            Log.d("lsy","imgInfo result3 결과 : $result3")
+
             val uriTest = Uri.fromFile(File(filePath))
             Log.d("lsy"," filePath 경로 찍어보기"+uriTest.toString())
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
