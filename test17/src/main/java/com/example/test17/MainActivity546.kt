@@ -114,7 +114,12 @@ class MainActivity546 : AppCompatActivity() {
                 file
             )
 
+            // 공유 프레퍼런스 파일에 값을 저장 하는 부분.
+            // imgLoadTest 파일의 이름으로 저장.
+            //
             val pref = getSharedPreferences("imgLoadTest", Context.MODE_PRIVATE)
+            // 키, 값 형태로 저장하는 방식.
+            // commit 하게 되면, 실제 저장소 파일에 저장.
             pref.edit().run {
                 putString("imgfileUri", photoURI.toString())
                 putString("imgfile", filePath)
@@ -157,8 +162,18 @@ class MainActivity546 : AppCompatActivity() {
 //                    )
 //                    Log.d("lsy", "resolver 단계")
 
+            //작업중.
+            // 1 카메라 앱 사진 촬영 -> 2찍은 사진 파일 앱별 저장소 파일로 저장
+            // 3 결과 이미지 뷰에 붙이기 -> 4 사진의 저장소 위치의 절대 경로를 공유 프레퍼런스 파일에 저장.
+            // 5 공유 프레퍼런스에 저장된 사진 파일의 절대 경로를 불러오기.
+            // 6 불러온 절대 경로의 uri 값을 가져오기.
+            // 7 불러온 uri 값으로 bitmap 변환작업을 해서, 해당 결과 이미지 뷰에 붙여넣기
+
+
             val uriTest = Uri.fromFile(File(filePath))
             Log.d("lsy"," filePath 경로 찍어보기"+uriTest.toString())
+
+            // 공유 프레퍼런스에 저장된 값을 불러오기
             val pref = getSharedPreferences("imgLoadTest", Context.MODE_PRIVATE)
             val imgfileUri : String? = pref.getString("imgfileUri","값이 없으면 디폴트값이 옵니다.")
             val imgfile : String? = pref.getString("imgfile","값이 없으면 디폴트값이 옵니다.")
@@ -166,8 +181,17 @@ class MainActivity546 : AppCompatActivity() {
             if (imgfileUri != null) {
                 resolver.openInputStream(imgfileUri.toUri()).use { stream ->
                     // stream 객체에서 작업 수행
+
+                    val calRatio = calculateInSampleSize(
+                        Uri.fromFile(File(filePath)),
+                        resources.getDimensionPixelSize(R.dimen.imgSize),
+                        resources.getDimensionPixelSize(R.dimen.imgSize)
+                    )
                     val option = BitmapFactory.Options()
-                    option.inSampleSize = 10
+                    option.inSampleSize = calRatio
+
+//                    val option = BitmapFactory.Options()
+//                    option.inSampleSize = 10
                     val bitmap = BitmapFactory.decodeStream(stream, null, option)
                     binding.resultImageView.setImageBitmap(bitmap)
                 }
