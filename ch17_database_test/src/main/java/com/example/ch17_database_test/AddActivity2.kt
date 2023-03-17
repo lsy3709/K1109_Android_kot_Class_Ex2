@@ -25,10 +25,13 @@ class AddActivity2 : AppCompatActivity() {
         when(item.itemId){
             R.id.menu_add_save2 ->{
                 //add........................
+                // name
                 val inputData1 = binding.addEditView2.text.toString()
 
+                // age
                 val inputData2 = binding.addEditView3.text.toString()
 
+                // DBhelper 클래스 이름을 변경해서 샘플.
                 val db = DBhelper(this).writableDatabase
                 db.execSQL(
                     "insert into USER (name, age) values (?,?)",
@@ -36,6 +39,7 @@ class AddActivity2 : AppCompatActivity() {
                 )
                 db.close()
 
+                // 현재 입력 액티비티 , 메인으로 돌아갈 때, name, age 를 전달하는 부분.
                 val intent = intent
                 intent.putExtra("result_name", inputData1)
                 intent.putExtra("result_age", inputData2)

@@ -1,7 +1,7 @@
 1. 새로운 모듈 만들어서.:ch17_database_test
 2.데이터베이스 이름 : testdb2
 3.
-table : User
+table : User -> USER
 column : _id pk, autoincrement, name, age
 입력 받는 부분은 2개만, name, age 만.
 샘플 3개정도 입력 후, 메인에 조회하기.

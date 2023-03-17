@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ch17_database_test.databinding.ItemRecyclerview2Binding
 
+// 뷰 객체들을 묶어 주는 역할. 목록의 요소.
 class MyViewHolder2(val binding: ItemRecyclerview2Binding): RecyclerView.ViewHolder(binding.root)
 
 class MyAdapter2(val datas: MutableList<String>?,val datas2: MutableList<String>?): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
