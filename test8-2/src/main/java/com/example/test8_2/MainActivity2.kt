@@ -57,10 +57,10 @@ class MainActivity2 : AppCompatActivity(), CompoundButton.OnCheckedChangeListene
         binding.checkbox?.setOnCheckedChangeListener {
                 a, b ->
             if(state == 0){
-                binding.img1.visibility = View.INVISIBLE
+//                binding.img1.visibility = View.INVISIBLE
                 state = 1
             } else {
-                binding.img1.visibility = View.VISIBLE
+//                binding.img1.visibility = View.VISIBLE
                 state = 0
             }
 
