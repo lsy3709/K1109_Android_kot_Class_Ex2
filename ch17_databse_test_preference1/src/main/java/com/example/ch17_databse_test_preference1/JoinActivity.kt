@@ -20,6 +20,8 @@ import java.util.*
 class JoinActivity : AppCompatActivity() {
     lateinit var binding: ActivityJoinBinding
     lateinit var filePath: String
+    lateinit var userEmail: String
+    lateinit var userPassword: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +68,7 @@ class JoinActivity : AppCompatActivity() {
 
             val photoURI: Uri = FileProvider.getUriForFile(
                 this,
-                "com.example.test17.fileprovider",
+                "com.example.ch17_test17_preference.fileprovider",
                 //com.example.test17.fileprovider
                 file
             )
@@ -74,25 +76,48 @@ class JoinActivity : AppCompatActivity() {
             // 공유 프레퍼런스 파일에 값을 저장 하는 부분.
             // imgLoadTest 파일의 이름으로 저장.
             //
-            val pref = getSharedPreferences("imgLoadTest", Context.MODE_PRIVATE)
-            // 키, 값 형태로 저장하는 방식.
-            // commit 하게 되면, 실제 저장소 파일에 저장.
-            pref.edit().run {
-                putString("imgfileUri", photoURI.toString())
-                putString("imgfile", filePath)
-                commit()
-            }
-            val resultStr2 : String? = pref.getString("imgUri","값이 없으면 디폴트값이 옵니다.")
-            val result3 = resultStr2.toString()
-            Log.d("lsy","imgInfo result3 결과 : $resultStr2")
-            Log.d("lsy","imgInfo result3 결과 : $result3")
 
-            val uriTest = Uri.fromFile(File(filePath))
-            Log.d("lsy"," filePath 경로 찍어보기"+uriTest.toString())
+//            val resultStr2 : String? = pref.getString("imgUri","값이 없으면 디폴트값이 옵니다.")
+//            val result3 = resultStr2.toString()
+//            Log.d("lsy","imgInfo result3 결과 : $resultStr2")
+//            Log.d("lsy","imgInfo result3 결과 : $result3")
+//
+//            val uriTest = Uri.fromFile(File(filePath))
+//            Log.d("lsy"," filePath 경로 찍어보기"+uriTest.toString())
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
             requestCameraFileLauncher.launch(intent)
 
+        }
+
+        // 회원 가입 버튼을 눌러서, 정보를 전달하려면, 인텐트 를 이용해.
+        // 단순 이동으로 사용하겠음. 일단.
+        binding.joinBtn.setOnClickListener {
+            userEmail = binding.userEmail.text.toString()
+            userPassword = binding.userPassword.text.toString()
+
+            // 공유 프리퍼런스라는 파일에 , 이메일, 패스워드, 사진의 이미지의 위치 정보를 인자값으로
+            // 전달하면, 파일에 저장한다.
+            uploadUserData(filePath,userEmail,userPassword)
+
+            // 단순, 메인으로만 이동.
+            val intent = Intent(this@JoinActivity,MainActivity::class.java)
+            startActivity(intent)
+
+        }
+
+    }
+
+
+    private  fun uploadUserData(imgFilePath:String, userEmail:String, userPassword:String){
+        val pref = getSharedPreferences("joinTest", Context.MODE_PRIVATE)
+        // 키, 값 형태로 저장하는 방식.
+        // commit 하게 되면, 실제 저장소 파일에 저장.
+        pref.edit().run {
+            putString("email", userEmail)
+            putString("password", userPassword)
+            putString("imgfile", imgFilePath)
+            commit()
         }
     }
 
