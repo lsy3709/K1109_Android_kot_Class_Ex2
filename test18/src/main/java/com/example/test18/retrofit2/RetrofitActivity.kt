@@ -30,7 +30,7 @@ class RetrofitActivity : AppCompatActivity() {
             override fun onResponse(call: Call<UserListModel>, response: Response<UserListModel>) {
 
                 val userList = response.body()
-
+                Log.d("lsy","Test18 userList data 값 : ${userList?.data}")
                 //.......................................
 
                 binding.recyclerView.adapter=MyAdapter(this@RetrofitActivity, userList?.data)
