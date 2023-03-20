@@ -165,10 +165,191 @@ val userList = response.body()
 주의사항, 안드로이드 매니페스트 파일입니다.
 1) .retrofit2.RetrofitActivity 등록이 안된 부분.
 2)    android:name=".retrofit2.MyApplication"
+=======================================================
+부가 내용.
 
+@GET, @POST , @PUT , @DELETE , @HEAD
 
+@GET("users/list")
+아래의 서버의 주소에서 , 뒷 부분에 추가 되는 부분
+baseUrl("https://reqres.in/")
+예시)
+https://reqres.in/users/list
 
+예시2)
+@GET("users/list?sort=desc")
+=======================================================
+@Path
+URL 경로를 동적으로 지정할 때 사용.
+예시)
+ @GET("group/{id}/users/{name}")
+    fun test2(
+        @Path("id") userId: String,
+        @Path("name") userName: String
+    ): Call<UserModel>
 
+id 영역에 들어갈 데이터를 함수의 매개변수로 받으려면 그 매개변수에
+@Path 애너테이션 추가함.
+
+예시2)
+val call:Call<UserModel> =
+networkService.test2("10","lsy")
+
+예시3)
+서버 입장에서는
+https://reqres.in/group/10/users/lsy
+
+=======================================================
+@Query
+함수의 매개변숫값을 서버에 전달하고 싶을 때 사용.
+
+예시1)
+   @GET("group/users")
+    fun test3(
+        @Query("sort") arg1: String,
+        @Query("name") arg2: String
+    ): Call<UserModel>
+
+예시2)
+val call:Call<UserModel> =
+networkService.test3("age","lsy")
+
+예시3)
+서버 입장에서는
+https://reqres.in/users?sort=age&name=lsy
+
+=======================================================
+@QueryMap
+서버에 전송할 데이터가 여러 개 일경우 사용.
+
+예시1)
+@GET("group/users")
+    fun test4(
+        @QueryMap options: Map<String, String>,
+        @Query("name") name: String
+    ): Call<UserModel>
+
+예시2)
+val call:Call<UserModel> =
+networkService.test4(
+mapOf<String,String>("one" to "hi", "two" to "hi2"),
+ "lsy")
+
+예시3)
+서버 입장에서는
+https://reqres.in/users?one=hi&two=hi2@name=lsy
+
+=======================================================
+@Body
+서버에 전송할 데이터를 모델 객체로 지정 할 때 사용.
+객체의 포러퍼티명을 키로, 포러퍼티의 데이터를 값으로 해서
+!!JSON 문자열을 만들어서 서버에 전송함. !!
+주의)
+JSON 문자열 데이터 스트림으로 전송하므로
+@Body , @POST 와 함께 사용하기. !!!(@GET 안됨.!)
+
+예시1)
+ @POST("group/users")
+    fun test5(
+        @Body user: UserModel,
+        @Query("name") name: String
+    ): Call<UserModel>
+
+예시2)
+val call:Call<UserModel> =
+networkService.test5(
+UserModel(id="1", firstName="sang", lastName="lee",
+avatar="sourceurl", "lsy")
+
+예시3)
+서버 입장에서는 (브라우저에서 주소를 입력시, 전부다 get 방식이라서,
+실제 주소에 찍히는 값이렇고, ) 리턴 받은 데이터의 결과값을 확인하면됨.
+(웹 브라우저에서는 포스트로 호출이 안됨. postman 특정 프로그램을 사용해서
+테스트를 하시면 됩니다.) 우리는 안드로이드 스튜디오에서 , 다 테스트 됨.
+대신에 코드를 짜야 해서 그렇지.
+
+https://reqres.in/users?name=lsy
+
+예시4)
+서버에서 스트림으로 전송되는 데이터 형식
+{ "id":"1", "first_name":"sang" , "last_name":"lee" ,
+"avatar":"sourceurl"}
+
+=======================================================
+@FormUrllEncoded 와 @Field
+URL 인코딩 형태로 만들어 전송할 경우에 사용.
+
+@Body 는 데이터를 JSON 으로 만들어 전송하지만,
+@FormUrllEncoded 서버의 전송 데이터를 '키=값' 형태의
+URL 인코딩으로 전송 함.
+
+@Field 애너테이션이 추가된 데이터를 인코딩해서 전송하고
+@FormUrlEncoded 애너테이션 사용할 때만 적용 할수 있음.
+주의)
+@POST로만 전달 해야함.
+
+예시1)
+@FormUrlEncoded
+    @POST("user/edit")
+    fun test6(
+        @Field("first_name") first: String?,
+        @Field("last_name") last: String?,
+        @Query("name") name: String?
+    ): Call<UserModel>
+
+예시2)
+val call:Call<UserModel> =
+networkService.test6(
+"sang 상","lee 이", "lsy")
+
+예시3)
+서버 입장에서는
+
+https://reqres.in/user/edit?name=lsy
+
+예시4)
+서버에 스트림으로 전송되는 데이터
+first_name=sang%인코딩 값이 들어감&last_name=lee%인코딩 값이 들어감
+
+키 값에 리스트로 전달하는 부분.
+예시1)
+ @FormUrlEncoded
+    @POST("tasks")
+    fun test7(@Field("title") titles: List<String>): Call<UserModel>
+예시2)
+val list: MutableList<String> = ArrayList()
+list.add("이상용")
+list.add("이상용2")
+val call = networkService.test7(list)
+
+예시3)
+서버 입장에서는
+https://reqres.in/tasks
+
+예시4)
+title=%인코딩 1번값이 들어감&title=%인코딩 2번값이 들어감...
+
+@Header
+서버 요청에서 헤더 값을 조정하고 싶을 때 사용.
+예시1)
+    @Headers("Cache-Control: max-age=640000")
+    @GET("widget/list")
+    fun test8(): Call<UserModel>
+
+@Url
+기본 baseUrl 이 있지만, 다른 url 를 호출 할 때 사용.
+
+예시1)
+@GET
+fun test9(@Url url: String, @Query("name") name: String): Call<UserModel>
+
+예시2)
+val cal = networkService.test9(
+"http://www.google.com","lsy")
+
+예시3)
+서버입장에서
+http://www.google.com/?name=lsy
 
 
 
