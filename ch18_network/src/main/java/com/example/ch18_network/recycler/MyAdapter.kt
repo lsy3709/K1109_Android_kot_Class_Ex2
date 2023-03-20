@@ -28,6 +28,7 @@ class MyAdapter(val context: Context, val datas: MutableList<ItemModel>?): Recyc
         binding.itemTitle.text = model.title
         binding.itemDesc.text = model.description
         binding.itemTime.text = "${model.author} At ${model.publishedAt}"
+
         Glide.with(context)
             .load(model.urlToImage)
             .into(binding.itemImage)

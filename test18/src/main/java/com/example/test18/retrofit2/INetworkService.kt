@@ -7,6 +7,8 @@ import retrofit2.http.*
 interface INetworkService {
     @GET("api/users")
     fun doGetUserList(@Query("page") page: String): Call<UserListModel>
+
+    // 프로필 이미지 가져오는 추상 메서드.
     @GET
     fun getAvatarImage(@Url url: String): Call<ResponseBody>
 

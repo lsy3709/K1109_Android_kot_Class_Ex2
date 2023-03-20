@@ -19,6 +19,15 @@
         android:name=".retrofit2.MyApplication"
         >
         <activity
+            android:name=".GlideActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".retrofit2.RetrofitActivity"
             android:exported="true">
             <intent-filter>
