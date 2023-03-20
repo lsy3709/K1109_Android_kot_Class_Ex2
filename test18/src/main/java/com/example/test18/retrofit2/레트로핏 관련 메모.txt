@@ -1,0 +1,178 @@
+안드로이드 네트워크 프로그래밍
+출처: 깡쌤의 안드로이드 with 코틀린
+Retrofit(라이브러리 소개 및 간단 설명, 예제, 실습)
+
+스퀘어에서 만들었음. HTTP 통신을 간편하게 해주는 라이브러리이다.
+1버전, 2버전(출시: 2015년),
+Retrofit 라고 이야기 하면, 버전 2라고 이해하면 됨.
+
+구조
+네트워크 통신 정보만 주면 그대로 네트워크 프로그래밍 대신 구현해줌.
+
+인터페이스를 직접 생성. 이 인터페이스는 통신할 때 필요함.
+인터페이스에 있는 함수를 알아서 호출해서 통신 해준다.
+
+함수가 반환 타입 : Call 객체를 반환.
+Call 객체의 enqueue() 함수를 호출하는 순간에 통신을 수행.
+
+요약
+1) 통신용 함수를 선언한 인터페이스 작성 필요.
+2) Retrofit에 인터페이스를 전달.
+3) Retrofit 통신용 서비스 객체를 반환함.
+4) 서비스의 통신용 함수를 호출한 후  Call 객체를 반환.
+5) Call 객체의 enqueue() 함수를 호출해서 네트워크 통신 한다.
+
+순서1
+외부 build.gradle 등록.
+implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+// json 변환하기 위한 또라이브러리, gson 예시.
+implementation 'com.google.code.gson:gson:2.8.9'
+implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+모델 클래스 선언( VO 클래스)
+https://reqres.in
+{
+  "id":1,
+  "email" : "lsy",
+  "first_name" : "sang",
+  "last_name" : "Lee",
+  "avatar" : "https://reqres.in/img/faces/7-image.jpg"
+}
+
+순서2
+모델 클래스
+서버와 주고받는 데이터를 표현하는 클래스. VO(Value Object) 클래스,
+JSON, XML 데이터를 파싱해 모델 클래스 객체 담는 것을 자동화 해줌.
+gson 라이브러리 이용해서.
+
+예시)
+data class UserModel(
+    var id: String,
+    @SerializedName("first_name")
+    var firstName: String,
+    // @SerializedName("last_name")
+    var lastName: String,
+    var avatar: String,
+    var avatarBitmap: Bitmap
+)
+
+기본 규칙, 키와 값 의 형태로 저장.
+키와 프로퍼티의 이름이 다른 경우.
+@SerializedName 명시합니다.
+
+예)
+@SerializedName("first_name")
+first_name 이라는 기의 데이터가 -> firstName 으로 저장됨.
+
+만약, @SerializedName 애너테이션을 사용을 안해도
+예)  // @SerializedName("last_name")
+자동으로 lastName 자동으로 저장.
+
+주의) 넘어오는 데이터가 없는 변수를 선언해도 상관 없음.
+현재, 데이터 모델의 갯수가 5개이고, 여기에 없는
+var avatarBitmap:Bitmap 이렇게 만들어도 상관없다.
+
+실제로 작업은, 낱개로 작업을 안하고, 해당 데이터모델을 기반으로
+리스트로 작업을 합니다.
+
+예시)
+{
+    "page": 2,
+    "per_page": 6,
+    "total": 12,
+    "total_pages": 2,
+    "data": [
+        {
+            "id": 7,
+            "email": "michael.lawson@reqres.in",
+            "first_name": "Michael",
+            "last_name": "Lawson",
+            "avatar": "https://reqres.in/img/faces/7-image.jpg"
+        },
+        {
+            "id": 8,
+            "email": "lindsay.ferguson@reqres.in",
+            "first_name": "Lindsay",
+            "last_name": "Ferguson",
+            "avatar": "https://reqres.in/img/faces/8-image.jpg"
+        },
+
+모델로 변경하면 ->
+예시)
+data class UserListModel(
+    var page: String,
+    @SerializedName("per_page")
+    var perPage: String,
+    var total: String,
+    @SerializedName("total_pages")
+    var totalPages: String,
+
+	// 실제 데이터 모델를 리스트 타입으로 제너릭으로해서 명시한다.
+    var data: List<UserModel>?
+)
+
+순서3
+서버인테페이스 정의.
+메인 부분.
+네트워크 통신이 필요한 순간에 호출할 함수를 작성한다.
+예시)
+interface INetworkService {
+@GET("api/users")
+fun doGetUserList(@Query("page") page: String): Call<UserListModel>
+@GET
+fun getAvatarImage(@Url url: String): Call<ResponseBody>
+
+@GET("users/list?sort=desc")
+fun test1(): Call<UserModel>
+
+순서4
+Retrofit 객체 생성
+예시)
+val retrofit: Retrofit
+get() = Retrofit.Builder()
+.baseUrl("https://reqres.in/")
+.addConverterFactory(GsonConverterFactory.create())
+.build()
+
+순서5
+인터페이스 타입의 서비스 객체 얻기.
+예시)
+var networkService: INetworkService
+networkService = retrofit.create(INetworkService::class.java)
+
+retrofit.create 함수 부분이
+직접 만든 인터페이스 인자로 사용하고,
+반환 값 : 인터페이스를 구현한 클래스의 객체를 반환해줌.
+실제 네트워크가 필요할 때 이 객체의 함수를 호출하면 됨.
+
+순서6
+네트워크 통신 시도
+예시)
+val userListCall = networkService.doGetUserList("1")
+
+반환이 Call 객체 반환되고, 실제 통신은
+Call 객체의 enqueue() 함수를 호출하는 순간 이루어진다.
+
+예시)
+userListCall.enqueue(object : Callback<UserListModel> {
+override fun onResponse(call: Call<UserListModel>, response: Response<UserListModel>) {
+
+val userList = response.body()
+
+//.......................................
+
+실습 테스트 코드 확인시
+주의사항, 안드로이드 매니페스트 파일입니다.
+1) .retrofit2.RetrofitActivity 등록이 안된 부분.
+2)    android:name=".retrofit2.MyApplication"
+
+
+
+
+
+
+
+
+
+
+
