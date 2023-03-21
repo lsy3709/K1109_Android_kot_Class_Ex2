@@ -10,6 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.K1109_Android_kot_Class_Ex"
+        android:networkSecurityConfig="@xml/network_config"
        android:name=".MyApplication">
         <activity
             android:name=".MainActivity"
